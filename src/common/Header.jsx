@@ -19,16 +19,24 @@ export default function Header() {
       </button>
       <ul className={`${styles.navLinks} ${isOpen ? styles.active : ""}`}>
         <li className={styles.navItem}>
-          <Link to="/">Car Evaluation</Link>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            Home
+          </Link>
         </li>
         <li className={styles.navItem}>
-          <Link to="/claim-history">Claim History</Link>
+          <Link to="/locations" style={{ textDecoration: "none" }}>
+            Locations
+          </Link>
         </li>
         <li className={styles.navItem}>
-          <Link to="/premium-calculator">Premium Calculator</Link>
+          <Link to="/about" style={{ textDecoration: "none" }}>
+            About Us
+          </Link>
         </li>
         <li className={styles.navItem}>
-          <Link to="/discount-rate">Discount Rate</Link>
+          <Link to="/contact" style={{ textDecoration: "none" }}>
+            Contact Us
+          </Link>
         </li>
         <li className={styles.navItem}>
           <button className={styles.loginButton}>Login</button>

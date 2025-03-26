@@ -9,7 +9,7 @@
   width: 35px;
   padding: 6px;
   flex-shrink: 0;
-  background: #6d4fc2;
+  background: #0073cf;
   fill: #fff;
   border-radius: 50%;
   margin-bottom: 2px;
@@ -44,7 +44,7 @@
 
 .userMessage .userText {
   color: #fff;
-  background: #6d4fc2;
+  background: #0073cf;
   border-radius: 13px 13px 3px 13px;
 }
 

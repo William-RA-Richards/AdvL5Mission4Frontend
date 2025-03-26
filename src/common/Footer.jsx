@@ -7,6 +7,10 @@ export default function Footer() {
     <div>
       <footer className={styles.footer}>
         <img className={styles.logo} src={Logo} alt="Turners" />
+        <p>
+          © 2025 Turner's Car Insurance. All rights reserved. T.I.N.A® is a
+          registered trademark of Turner's Car Insurance.
+        </p>
       </footer>
     </div>
   );
