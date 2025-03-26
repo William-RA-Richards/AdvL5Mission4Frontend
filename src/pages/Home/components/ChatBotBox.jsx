@@ -6,17 +6,19 @@ import ChatMessage from "./ChatMessage";
 
 export default function ChatBotBox() {
   const inputRef = useRef();
+  const messagesEndRef = useRef(null);
 
   const [chatHistory, setChatHistory] = useState([
     {
       role: "Model",
       parts: [
         {
-          text: "Hey there 👋, I'm TINA, your Technical Insurance Narrative Assistant. I Help You to choose the right insurance policy. May I ask you a few personal questions to make sure I recommend the best policy for you?",
+          text: "Hey there 👋, I'm TINA, your Technical Insurance Narrative Assistant. I am here to help you to choose the right insurance policy. May I ask you a few personal questions to make sure I recommend the best policy for you?",
         },
       ],
     },
   ]);
+  const [showChatBot, setShowChatBot] = useState(false);
 
   function handleFormSubmit(e) {
     e.preventDefault();
@@ -34,9 +36,10 @@ export default function ChatBotBox() {
         ...history,
         { role: "Model", parts: [{ text: "Thinking..." }] },
       ]);
-    }, 1200);
-
-    generateBotResponse(userMessage);
+    }, 600);
+    setTimeout(() => {
+      generateBotResponse(userMessage);
+    }, 1800);
   }
 
   async function resetChatBot() {
@@ -48,8 +51,6 @@ export default function ChatBotBox() {
         },
         body: JSON.stringify({ chatHistory }),
       });
-
-      const data = await result.json();
     } catch (error) {
       console.log(error);
     }
@@ -67,113 +68,133 @@ export default function ChatBotBox() {
 
       const data = await result.json();
 
-      setChatHistory((history) => [
-        ...history,
-        { role: "Model", parts: [{ text: data.response }] },
-      ]);
+      const updateHistory = (text) => {
+        setChatHistory((prev) => [
+          ...prev.filter((msg) => msg.parts[0].text !== "Thinking..."),
+          { role: "Model", parts: [{ text: text }] },
+        ]);
+      };
+
+      updateHistory(data.response);
     } catch (error) {
       console.error(error);
     }
   }
 
   useEffect(() => {
-    chatHistory.forEach((chat) => console.log(chat));
+    resetChatBot();
+  }, []);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
   }, [chatHistory]);
 
   return (
-    <div className={styles.chatBotPopUp}>
-      <div className={styles.chatHeader}>
-        <div className={styles.headerInfo}>
-          <ChatBotIcon />
-          <h2 className={styles.headerText}>T.I.N.A</h2>
+    <div
+      div
+      className={`${styles.container} ${showChatBot ? styles.showChatBot : ""}`}
+    >
+      <button
+        onClick={() => setShowChatBot((prev) => !prev)}
+        id={styles.chatBotToggler}
+      >
+        <span className="material-symbols-outlined">mode_comment</span>
+        <span className="material-symbols-outlined">close</span>
+      </button>
+      <div className={styles.chatBotPopUp}>
+        <div className={styles.chatHeader}>
+          <div className={styles.headerInfo}>
+            <ChatBotIcon />
+            <h2 className={styles.headerText}>T.I.N.A</h2>
+          </div>
+          <button className={styles.materialSymbolsRounded}>
+            <span className="material-symbols-outlined">
+              keyboard_arrow_down
+            </span>
+          </button>
         </div>
-        <button className="material-symbols-rounded">^</button>
-      </div>
 
-      <div className={styles.chatBotBody}>
-        <div className={`${styles.message} ${styles.botMessage}`}>
-          <ChatBotIcon />
-          <p className={styles.messageText}>
-            Hey there 👋, I'm TINA, your Technical Insurance Narrative
-            Assistant. I Help You to choose the right insurance policy. May I
-            ask you a few personal questions to make sure I recommend the best
-            policy for you?
-          </p>
+        <div className={styles.chatBotBody}>
+          {chatHistory.map((chat, index) => {
+            return (
+              <ChatMessage
+                key={index}
+                role={chat.role}
+                message={chat.parts[0].text}
+              />
+            );
+          })}
+          <div ref={messagesEndRef} />
         </div>
-        {chatHistory.map((chat, index) => {
-          return (
-            <ChatMessage
-              key={index}
-              role={chat.role}
-              message={chat.parts[0].text}
-            />
-          );
-        })}
-      </div>
 
-      <div className={styles.chatBotFooter}>
-        <form className={styles.chatForm} onSubmit={handleFormSubmit}>
-          <div className={styles.messageBox}>
-            <div className={styles.fileUploadWrapper}>
-              <label htmlFor="file">
+        <div className={styles.chatBotFooter}>
+          <form className={styles.chatForm} onSubmit={handleFormSubmit}>
+            <div className={styles.messageBox}>
+              <div className={styles.fileUploadWrapper}>
+                <label htmlFor="file">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 337 337"
+                  >
+                    <circle
+                      strokeWidth="20"
+                      stroke="#6c6c6c"
+                      fill="none"
+                      r="158.5"
+                      cy="168.5"
+                      cx="168.5"
+                    ></circle>
+                    <path
+                      strokeLinecap="round"
+                      strokeWidth="25"
+                      stroke="#6c6c6c"
+                      d="M167.759 79V259"
+                    ></path>
+                    <path
+                      strokeLinecap="round"
+                      strokeWidth="25"
+                      stroke="#6c6c6c"
+                      d="M79 167.138H259"
+                    ></path>
+                  </svg>
+                  <span className={styles.tooltip}>Add an image</span>
+                </label>
+                <input type="file" id="file" name="file" />
+              </div>
+              <input
+                ref={inputRef}
+                required=""
+                placeholder="Message..."
+                type="text"
+                id="messageInput"
+              />
+              <button id={styles.sendButton}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
-                  viewBox="0 0 337 337"
+                  viewBox="0 0 664 663"
                 >
-                  <circle
-                    strokeWidth="20"
-                    stroke="#6c6c6c"
-                    fill="none"
-                    r="158.5"
-                    cy="168.5"
-                    cx="168.5"
-                  ></circle>
                   <path
-                    strokeLinecap="round"
-                    strokeWidth="25"
-                    stroke="#6c6c6c"
-                    d="M167.759 79V259"
+                    fill="none"
+                    d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
                   ></path>
                   <path
+                    strokeLinejoin="round"
                     strokeLinecap="round"
-                    strokeWidth="25"
+                    strokeWidth="33.67"
                     stroke="#6c6c6c"
-                    d="M79 167.138H259"
+                    d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
                   ></path>
                 </svg>
-                <span className={styles.tooltip}>Add an image</span>
-              </label>
-              <input type="file" id="file" name="file" />
+              </button>
             </div>
-            <input
-              ref={inputRef}
-              required=""
-              placeholder="Message..."
-              type="text"
-              id="messageInput"
-            />
-            <button id={styles.sendButton}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 664 663"
-              >
-                <path
-                  fill="none"
-                  d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
-                ></path>
-                <path
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="33.67"
-                  stroke="#6c6c6c"
-                  d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
-                ></path>
-              </svg>
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

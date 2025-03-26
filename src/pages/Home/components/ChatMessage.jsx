@@ -6,8 +6,6 @@ export default function ChatMessage({ role, message }) {
   const isUserMessage = role === "User" ? true : false;
   const isThinking =
     role === "Model" && message === "Thinking..." ? true : false;
-  console.log(isUserMessage);
-  console.log("Think:", isThinking);
   return (
     <div
       className={`${styles.message} ${
