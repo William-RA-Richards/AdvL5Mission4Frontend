@@ -1,0 +1,9 @@
+.box {
+  height: 1fr;
+  width: 1fr;
+  border: 2px solid black;
+}
+
+.box img {
+  width: 100%;
+}

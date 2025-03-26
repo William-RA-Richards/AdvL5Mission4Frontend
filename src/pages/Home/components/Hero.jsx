@@ -4,13 +4,12 @@ import { useState } from "react";
 import img1 from "../../../assets/tina_websitetile_thisway_1078x303f.jpg";
 import img2 from "../../../assets/tina_websitetile_1078x303f.jpg";
 import img3 from "../../../assets/mostawesome_websiteads_1078x303_tinaf.jpg";
-import img4 from "../../../assets/channels4_banner.jpg";
-import img5 from "../../../assets/contact-us.png";
-import img6 from "../../../assets/how-to-pay.png";
-import img7 from "../../../assets/finance_websiteads_newtina_update1078x303f.jpg";
+import img4 from "../../../assets/contact-us.png";
+import img5 from "../../../assets/how-to-pay.png";
+import img6 from "../../../assets/finance_websiteads_newtina_update1078x303f.jpg";
 
 export default function Hero() {
-  const imageArray = [img1, img2, img3, img4, img5, img6, img7];
+  const imageArray = [img1, img2, img3, img4, img5, img6];
 
   const arrayLength = imageArray.length - 1;
 
